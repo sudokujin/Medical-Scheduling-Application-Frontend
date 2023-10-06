@@ -1,2 +1,2 @@
-/api/*  https://medical-scheduler-spring-boot.herokuapp.com/:splat  200
+/api/*  https://medical-scheduling-application.herokuapp.com/:splat  200
 /*  /index.html  200
