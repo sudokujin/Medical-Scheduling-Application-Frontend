@@ -4,7 +4,7 @@ import axios from 'axios';
 var userId = 5;
 
 const http = axios.create({
-    baseURL: "https://medical-scheduler-spring-boot.herokuapp.com/"
+    baseURL: "https://medical-scheduling-application.herokuapp.com/"
 });
 
 export default {
