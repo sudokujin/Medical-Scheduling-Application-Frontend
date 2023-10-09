@@ -2,7 +2,7 @@
   <v-container>
     <nav-bar />
     <div class="main">
-      <h2>Rating summary for all doctors</h2>
+      <h2>Patient Reviews</h2>
       <p class="description">{{ this.title }}</p>
 
       <div class="well-display">
@@ -79,7 +79,7 @@
       </div>
 
       <a id="show-form-button" href="#" v-on:click.prevent="getItem"
-        >Create Review</a
+        >Write a Review</a
       >
       <v-col fill-height class="d-flex justify-start">
         <v-card>
@@ -145,7 +145,7 @@
         outlined
         hide-details
         class="ma-2"
-        label="Pick a Doctor to see their reviews!"
+        label="Choose a doctor to see reviews!"
         @change="chosenDoctor"
       ></v-select>
 
@@ -189,7 +189,7 @@ export default {
       patientName: "",
       patientId: null,
       title:
-        "Research our doctors so you can make the best choice for your needs!",
+        "Check their reviews so you can make the best choice for your needs!",
       newReview: {
         patientId: "",
         doctorId: "",
