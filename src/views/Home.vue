@@ -6,7 +6,7 @@
       <patient-list v-else-if="getRolePatient" />
       <admin-view v-else />
     </v-layout>
-    <v-layout v-if="getRoleDoctor">
+    <v-layout v-if="getRolePatient">
       <current-appointments />
     </v-layout>
   </v-container>
