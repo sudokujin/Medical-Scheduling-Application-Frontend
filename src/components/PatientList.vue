@@ -2,7 +2,7 @@
   <v-container fill-height fluid>
     <v-row justify="center">
       <v-col class="mx-16 px-16">
-        <h1 class="mb-6">What's up, doc?</h1>
+        <h1 class="mb-6">Welcome, Doctor!</h1>
         <v-divider class="mb-16"> </v-divider>
         <div class="display-1 ma-2 mt-16">Patients</div>
         <v-card>
@@ -34,29 +34,28 @@ export default {
         { text: "State", value: "states" },
       ];
     },
-  },
-  watch: {
-    getDoctorId: "getPatients", // Watch for changes in getDoctorId and call getPatients
-  },
-  methods: {
-    getPatients() {
-      let doctorId = this.$store.getters.getDoctorId;
-      patientService.getPatientByBookedAppointment(doctorId).then((response) => {
-        this.$store.commit("SET_PATIENTS", response.data);
-      });
+    getDoctorId() {
+      return this.$store.getters.getDoctorId;
     },
-    goToUpdateForm() {
-      this.item = "";
-      this.$router.push({ name: "updateDoctorAppointments" });
-    }
   },
   data() {
     return {
       patients: [],
     };
   },
+  watch: {
+    getDoctorId: "getPatients", // Watch for changes in getDoctorId and call getPatients
+  },
+  methods: {
+    getPatients() {
+      let doctorId = this.getDoctorId;
+      patientService.getPatientByBookedAppointment(doctorId).then((response) => {
+        this.patients = response.data; // Update patients data
+      });
+    },
+  },
   created() {
-    this.getPatients();
+    this.getPatients(); // Initial data load
   },
 };
 </script>
