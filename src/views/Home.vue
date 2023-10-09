@@ -73,7 +73,15 @@ export default {
             this.$store.commit("SET_DOCTOR_ID", parseInt(this.response));
           }
         );
+        this.setDoctorAppointments();
       }
+    },
+    async setDoctorAppointments() {
+      AppointmentService.getAppointmentsTodayAndLaterForDoctor(this.$store.state.doctorId).then(
+        (response) => {
+          this.$store.commit("SET_CURRENT_APPOINTMENTS", response.data);
+        }
+      );
     },
   },
   computed: {

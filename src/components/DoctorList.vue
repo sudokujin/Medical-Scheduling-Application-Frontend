@@ -81,7 +81,7 @@ export default {
       doctors: [],
       userId: 0,
       officeInfo: {
-        officeName: "Chciago Medical Group",
+        officeName: "Chicago Medical Group",
         mainAddress: "1000 Wabash Ave",
         cityState: "Chicago, IL 60611",
         mainPhone: "800-500-1212",

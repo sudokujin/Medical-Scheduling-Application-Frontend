@@ -2,14 +2,18 @@
   <v-container fill-height fluid>
     <v-row justify="center">
       <v-col class="mx-16 px-16">
-        <h1 class="mb-6">Welcome, Doctor!</h1>
-        <v-divider class="mb-16"></v-divider>
+        <h1 class="mb-6">What's up, doc?</h1>
+        <v-divider class="mb-16"> </v-divider>
         <div class="display-1 ma-2 mt-16">Patients</div>
+        <v-card>
         <v-data-table
-          :items="patients"
+          :items="this.$store.state.patients"
           :headers="headers"
           hide-default-footer
-        ></v-data-table>
+        >
+        </v-data-table>
+        </v-card>
+        <v-btn class="mt-3" @click="goToUpdateForm()"> Change Appointment </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -30,28 +34,29 @@ export default {
         { text: "State", value: "states" },
       ];
     },
-    getDoctorId() {
-      return this.$store.getters.getDoctorId;
-    },
-  },
-  data() {
-    return {
-      patients: [],
-    };
   },
   watch: {
     getDoctorId: "getPatients", // Watch for changes in getDoctorId and call getPatients
   },
   methods: {
     getPatients() {
-      let doctorId = this.getDoctorId;
+      let doctorId = this.$store.getters.getDoctorId;
       patientService.getPatientByBookedAppointment(doctorId).then((response) => {
-        this.patients = response.data; // Update patients data
+        this.$store.commit("SET_PATIENTS", response.data);
       });
     },
+    goToUpdateForm() {
+      this.item = "";
+      this.$router.push({ name: "updateDoctorAppointments" });
+    }
+  },
+  data() {
+    return {
+      patients: [],
+    };
   },
   created() {
-    this.getPatients(); // Initial data load
+    this.getPatients();
   },
 };
 </script>

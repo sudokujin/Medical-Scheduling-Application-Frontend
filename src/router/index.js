@@ -14,6 +14,7 @@ import RegisterDoctorForm from '../components/RegisterDoctorForm'
 import ReviewView from '../views/ReviewView'
 import CreateReview from "@/components/CreateReview.vue";
 import UpdateAppointmentForm from "@/components/UpdateAppointmentForm.vue";
+import UpdateDoctorAppointmentForm from "@/components/UpdateDoctorAppointmentForm.vue";
 
 
 Vue.use(Router)
@@ -99,6 +100,14 @@ const router = new Router({
       path: "/appointments/:id",
       name: "updateAppointment",
       component: UpdateAppointmentForm,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: "/doctorAppointments/:id",
+      name: "updateDoctorAppointments",
+      component: UpdateDoctorAppointmentForm,
       meta: {
         requiresAuth: false
       }
