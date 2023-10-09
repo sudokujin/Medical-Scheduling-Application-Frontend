@@ -3,14 +3,13 @@
     <v-row justify="center">
       <v-col class="mx-16 px-16">
         <h1 class="mb-6">What's up, doc?</h1>
-        <v-divider class="mb-16"> </v-divider>
+        <v-divider class="mb-16"></v-divider>
         <div class="display-1 ma-2 mt-16">Patients</div>
         <v-data-table
-          :items="this.$store.state.patients"
+          :items="patients"
           :headers="headers"
           hide-default-footer
-        >
-        </v-data-table>
+        ></v-data-table>
       </v-col>
     </v-row>
   </v-container>
@@ -31,13 +30,8 @@ export default {
         { text: "State", value: "states" },
       ];
     },
-  },
-  methods: {
-    getPatients() {
-      let doctorId = this.$store.getters.getDoctorId;
-      patientService.getPatientByBookedAppointment(doctorId).then((response) => {
-        this.$store.commit("SET_PATIENTS", response.data);
-      });
+    getDoctorId() {
+      return this.$store.getters.getDoctorId;
     },
   },
   data() {
@@ -45,8 +39,19 @@ export default {
       patients: [],
     };
   },
+  watch: {
+    getDoctorId: "getPatients", // Watch for changes in getDoctorId and call getPatients
+  },
+  methods: {
+    getPatients() {
+      let doctorId = this.getDoctorId;
+      patientService.getPatientByBookedAppointment(doctorId).then((response) => {
+        this.patients = response.data; // Update patients data
+      });
+    },
+  },
   created() {
-    this.getPatients();
+    this.getPatients(); // Initial data load
   },
 };
 </script>
