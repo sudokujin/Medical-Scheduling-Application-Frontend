@@ -81,9 +81,9 @@ export default {
       doctors: [],
       userId: 0,
       officeInfo: {
-        officeName: "Party Doctors United",
-        mainAddress: "1420 Savelives st",
-        cityState: "Phoenix, AZ",
+        officeName: "Chciago Medical Group",
+        mainAddress: "1000 Wabash Ave",
+        cityState: "Chicago, IL 60611",
         mainPhone: "800-500-1212",
       },
     };

@@ -2,7 +2,7 @@
   <nav>
     <v-app-bar app color="white">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <span class="font-weight-light">Medical Bros</span>
+      <span class="font-weight-light">Medical Scheduler</span>
       <v-spacer></v-spacer>
       <v-img
         class="mx-auto"
