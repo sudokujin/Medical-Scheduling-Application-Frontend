@@ -100,6 +100,9 @@ export default new Vuex.Store({
     currentPatientAppointment: state => {
         return state.appointments.filter(appointment => appointment.patientId === state.patientId);
     },
+    getDoctorId: state => {
+      return state.doctorId;
+    }
   },
   plugins: [createPersistedState()],
 })
