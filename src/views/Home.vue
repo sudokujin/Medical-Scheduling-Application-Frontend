@@ -2,25 +2,21 @@
   <v-container>
     <navbar />
     <v-layout>
-      <doctor-list v-if="getRoleDoctor" />
-      <patient-list v-else-if="getRolePatient" />
-      <admin-view v-else />
-    </v-layout>
-    <v-layout v-if="getRolePatient">
-      <current-appointments />
+      <admin-view v-if="getRoleAdmin" />
+      <patient-list v-else-if="getRoleDoctor" />
+      <doctor-list v-else />
     </v-layout>
   </v-container>
 </template>
 
 <script>
-import DoctorService from "../services/DoctorService.js";
-import PatientService from "../services/PatientService.js";
 import DoctorList from "../components/DoctorList.vue";
 import PatientList from "../components/PatientList.vue";
 import AdminView from "../components/AdminView.vue";
 import Navbar from "../components/Navbar.vue";
-import CurrentAppointments from "../components/CurrentAppointments.vue"; // Import the new component
-
+import PatientService from "@/services/PatientService";
+import DoctorService from "@/services/DoctorService";
+import AppointmentService from "@/services/AppointmentService";
 export default {
   name: "home",
   components: {
@@ -28,15 +24,42 @@ export default {
     PatientList,
     AdminView,
     Navbar,
-    CurrentAppointments, // Add the new component to the components object
   },
   watch: {
+    getPatientId: {
+      handler: "isPatient",
+      immediate: true,
+    },
     getDoctorId: {
       handler: "isDoctor",
       immediate: true,
     },
   },
   methods: {
+    isPatient() {
+      if (this.$store.state.user.authorities[0].name === "ROLE_USER") {
+        PatientService.getPatientByUserId(this.$store.state.user.id).then(
+          (response) => {
+            this.$store.commit("SET_PATIENT", response.data);
+          }
+        );
+        this.setPatientAppointments();
+        // PatientService.getCurrentPatientId(this.$store.state.user.id).then(
+        //     // eslint-disable-next-line no-unused-vars
+        //     (response) => {
+        //         this.$store.commit("SET_PATIENT_ID", this.response));
+        //     }
+        // );
+        // console.log(this.$store.state.patientId + " it worked!");
+      }
+    },
+    async setPatientAppointments() {
+      AppointmentService.getAppointmentByPatientId(this.$store.state.patientId).then(
+        (response) => {
+          this.$store.commit("SET_CURRENT_APPOINTMENTS", response.data);
+        }
+      );
+    },
     isDoctor() {
       if (this.$store.state.user.authorities[0].name === "ROLE_DOCTOR") {
         // DoctorService.getDoctorByUserId(this.$store.state.user.id).then(
@@ -65,17 +88,28 @@ export default {
     },
   },
   async created() {
+    // console.log(this.$store.state.user.authorities[0].name);
     if (this.$store.state.user.authorities[0].name === "ROLE_USER") {
       const currentPatientId = await PatientService.getCurrentPatientId(
         this.$store.state.user.id
       );
       this.$store.commit("SET_PATIENT_ID", parseInt(currentPatientId));
+      // console.log(
+      //   this.$store.state.patientId,
+      //   " CHECKING PATIENT ID IN THE STORE"
+      // );
     }
     if (this.$store.state.user.authorities[0].name === "ROLE_DOCTOR") {
       const currentDoctorId = await DoctorService.getCurrentDoctorId(
         this.$store.state.user.id
       );
       this.$store.commit("SET_DOCTOR_ID", parseInt(currentDoctorId));
+      // console.log(
+      //   this.$store.state.doctorId,
+      //   " CHECKING DOCTOR ID IN THE STORE"
+      // );
+      // const currentAppointments = await AppointmentService.getAppointmentByDoctorId(this.$store.state.doctorId);
+      // console.log(currentAppointments);
     }
   },
 };
