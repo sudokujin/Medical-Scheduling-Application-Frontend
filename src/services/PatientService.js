@@ -11,8 +11,11 @@ export default {
     getPatientList() {
         return http.get('/patients');
     },
+    getPatientByBookedAppointment(doctorId) {
+        return http.get(`/patients/getPatientForDoctor/${doctorId}`);
+    },
     getPatientByUserId(id) {
-        return http.get(`/patients/user/${id}`)
+        return http.get(`/patients/user/${id}`);
     },
     update(id, patient) {
         return http.put(`/patients/${id}`, patient);

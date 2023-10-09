@@ -34,7 +34,8 @@ export default {
   },
   methods: {
     getPatients() {
-      patientService.getPatientList().then((response) => {
+      let doctorId = this.$store.getters.getDoctorId;
+      patientService.getPatientByBookedAppointment(doctorId).then((response) => {
         this.$store.commit("SET_PATIENTS", response.data);
       });
     },
