@@ -2,7 +2,7 @@
   <v-container fill-height fluid>
     <v-row justify="center">
       <v-col class="mx-16 px-16">
-        <h1 class="mb-6">What's up, doc?</h1>
+        <h1 class="mb-6">Welcome, Doctor!</h1>
         <v-divider class="mb-16"> </v-divider>
         <div class="display-1 ma-2 mt-16">Patients</div>
         <v-card>
@@ -19,6 +19,8 @@
   </v-container>
 </template>
 
+import router from "../router"; // Import Vue Router
+
 <script>
 import patientService from "../services/PatientService.js";
 
@@ -34,9 +36,12 @@ export default {
         { text: "State", value: "states" },
       ];
     },
+    getDoctorId() {
+      return this.$store.getters.getDoctorId;
+    },
   },
   watch: {
-    getDoctorId: "getPatients", // Watch for changes in getDoctorId and call getPatients
+    getDoctorId: "refreshPatientList", // Watch for changes in getDoctorId and call getPatients
   },
   methods: {
     getPatients() {
@@ -44,6 +49,9 @@ export default {
       patientService.getPatientByBookedAppointment(doctorId).then((response) => {
         this.$store.commit("SET_PATIENTS", response.data);
       });
+    },
+    refreshPatientList() {
+      this.getPatients();
     },
     goToUpdateForm() {
       this.item = "";
