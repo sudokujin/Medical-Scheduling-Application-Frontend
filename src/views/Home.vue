@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import DoctorService from "../services/DoctorService.js";
+import PatientService from "../services/PatientService.js";
 import DoctorList from "../components/DoctorList.vue";
 import PatientList from "../components/PatientList.vue";
 import AdminView from "../components/AdminView.vue";

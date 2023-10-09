@@ -23,6 +23,14 @@
       getDoctorId() {
         return this.$store.getters.getDoctorId;
       },
+      headers() {
+        return [
+          { text: "Patient Name", value: "patientName" },
+          { text: "Date", value: "date" },
+          { text: "Time", value: "time" },
+          { text: "Description", value: "description" },
+        ];
+      },
     },
     watch: {
       getDoctorId: "fetchCurrentAppointments", // Watch for changes in getDoctorId and call fetchCurrentAppointments
@@ -38,16 +46,6 @@
     },
     created() {
       this.fetchCurrentAppointments(); // Initial data load
-    },
-    computed: {
-      headers() {
-        return [
-          { text: "Patient Name", value: "patientName" },
-          { text: "Date", value: "date" },
-          { text: "Time", value: "time" },
-          { text: "Description", value: "description" },
-        ];
-      },
     },
   };
   </script>
