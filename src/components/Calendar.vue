@@ -53,19 +53,28 @@
           :type="type"
           :events="filteredAppointments"
           :now="now"
+          @event-click="showAppointment"
         ></v-calendar>
       </v-sheet>
     </div>
+    <patient-details-modal
+      :modal="patientDetailsModal"
+      :patientDetails="selectedPatientDetails"
+      @close-modal="closePatientDetailsModal"
+    ></patient-details-modal>
   </v-container>
 </template>
 <script>
 import Navbar from "../components/Navbar.vue";
 import AppointmentService from "../services/AppointmentService";
+import PatientDetailsModal from "@/components/PatientDetailsModal.vue"; // Adjust the path as needed
+
 
 export default {
   name: "calendar",
   components: {
     Navbar,
+    PatientDetailsModal,
   },
   data() {
     return {
@@ -87,12 +96,30 @@ export default {
       selectedDoctorId: null, // id of doctor,
       doctors: [],
       doctorObj: {},
+
+      patientDetailsModal: false,
+      selectedPatientDetails: {},  // ***** or null ******
     };
   },
   methods: {
     chosenDoctor() {
       this.selectedDoctorId = this.doctorObj.doctorId;
     },
+    showAppointment(events) {
+        const appointmentId = events.id;
+
+        AppointmentService.getAppointmentById(appointmentId).then((response) => {
+          this.$store.commit("SET_APPOINTMENT", response.data);
+          this.$router.push("/appointment");
+        });
+      },
+    showPatientDetailsModal(patientDetails) {
+        this.selectedPatientDetails = patientDetails;
+        this.patientDetailsModal = true;
+      },
+    closePatientDetailsModal() {
+        this.patientDetailsModal = false;
+      },
     getAppointments() {
       AppointmentService.getAppointments().then((response) => {
         this.$store.commit("SET_APPOINTMENTS", response.data);
