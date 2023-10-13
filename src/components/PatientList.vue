@@ -6,12 +6,12 @@
         <v-divider class="mb-16"> </v-divider>
         <div class="display-1 ma-2 mt-16">Patients</div>
         <v-card>
-        <v-data-table
-          :items="this.$store.state.patients"
-          :headers="headers"
-          hide-default-footer
-        >
-        </v-data-table>
+          <v-data-table
+              :items="this.$store.state.patients"
+              :headers="headers"
+              hide-default-footer
+          >
+          </v-data-table>
         </v-card>
         <v-btn class="mt-3" @click="goToUpdateForm()"> Change Appointment </v-btn>
       </v-col>

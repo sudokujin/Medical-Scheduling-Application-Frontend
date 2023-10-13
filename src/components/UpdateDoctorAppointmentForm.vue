@@ -52,31 +52,6 @@
               @change="chosenAppointment"
             >
             </v-select>
-<!--            <v-select-->
-<!--              :items="this.$store.state.doctors"-->
-<!--              v-model="doctorObj"-->
-<!--              item-text="firstName"-->
-<!--              item-value="id"-->
-<!--              return-object-->
-<!--              dense-->
-<!--              outlined-->
-<!--              hide-details-->
-<!--              class="ma-2 pb-6"-->
-<!--              label="doctors"-->
-<!--              @change="chosenDoctor"-->
-<!--            ></v-select>-->
-<!--            <v-select-->
-<!--              :items="timeslots"-->
-<!--              v-model="appointment.appointmentTime"-->
-<!--              item-text=""-->
-<!--              item-value="id"-->
-<!--              return-object-->
-<!--              dense-->
-<!--              outlined-->
-<!--              hide-details-->
-<!--              class="ma-2 pb-6"-->
-<!--              label="timeslots"-->
-<!--            ></v-select>-->
             <v-text-field
                 v-show="selected === 'Update'"
                 v-model="appointmentObj.appointmentDate"
@@ -89,7 +64,7 @@
             <v-select
                 v-show="selected === 'Update' && appointmentObj.appointmentDate !== ''"
                 :items="timeslots"
-                v-model="appointmentObj.appointmentTime" t
+                v-model="appointmentObj.appointmentTime"
                 dense
                 outlined
                 hide-details
@@ -97,6 +72,20 @@
                 label="timeslots"
                 @change="chosenTime"
             ></v-select>
+
+            <v-text-field
+                v-if="patientName"
+                readonly
+                label="Patient Name"
+                :value="patientName"
+            ></v-text-field>
+
+            <v-text-field
+                v-if="patientEmailAddress"
+                readonly
+                label="Patient Email Address"
+                :value="patientEmailAddress"
+            ></v-text-field>
             <v-text-field
                 v-show="selected === 'Update'"
               v-model="appointmentObj.description"
@@ -117,6 +106,7 @@
 import AppointmentService from "../services/AppointmentService";
 import Navbar from "../components/Navbar.vue";
 import DoctorTimeService from "../services/DoctorTimeService";
+import PatientService from "../services/PatientService";
 export default {
   name: "UpdateAppointmentForm",
 
@@ -142,6 +132,8 @@ export default {
       appointmentDate: "",
       appointmentTime: "",
     },
+    patientName: '',
+    patientEmailAddress: '',
     timeslots: [],
     valid: false,
     selected: null,
@@ -256,6 +248,15 @@ export default {
         this.appointment = response.data;
       });
       this.chosenTime();
+      PatientService.getPatientById(this.appointmentObj.patientId)
+          .then(response => {
+            // Assuming the backend returns an object with a name field
+            this.patientName = response.data.firstName + ' ' + response.data.lastName;
+            this.patientEmailAddress = response.data.emailAddress;
+          })
+          .catch(error => {
+            console.error("Error fetching patient details:", error);
+          })
     },
   },
   created() {

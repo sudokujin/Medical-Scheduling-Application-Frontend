@@ -81,9 +81,9 @@ export default {
       doctors: [],
       userId: 0,
       officeInfo: {
-        officeName: "Chicago Medical Group",
-        mainAddress: "1000 Wabash Ave",
-        cityState: "Chicago, IL 60611",
+        officeName: "Programming Doctors United",
+        mainAddress: "555 Savelives st",
+        cityState: "Phoenix, AZ",
         mainPhone: "800-500-1212",
       },
     };

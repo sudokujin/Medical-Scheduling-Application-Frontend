@@ -71,6 +71,9 @@ export default new Vuex.Store({
     SET_DOCTORTOUPDATE(state, data) {
       state.doctorToUpdate = data;
     },
+    SET_PATIENTTOUPDATE(state, data) {
+      state.patientToUpdate = data;
+    },
     SET_TIMESLOTBYDOC(state, data) {
       state.timeSlotByDoctor = data;
     },

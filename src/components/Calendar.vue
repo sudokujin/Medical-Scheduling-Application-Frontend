@@ -105,14 +105,19 @@ export default {
     chosenDoctor() {
       this.selectedDoctorId = this.doctorObj.doctorId;
     },
-    showAppointment(events) {
-        const appointmentId = events.id;
-
-        AppointmentService.getAppointmentById(appointmentId).then((response) => {
-          this.$store.commit("SET_APPOINTMENT", response.data);
-          this.$router.push("/appointment");
+    showAppointmentDetails(event) {
+      const appointmentId = event.id; // You should adjust this to get the appointment ID from your event data.
+      
+      // Make an API request to retrieve patient details based on appointmentId
+      AppointmentService.getAppointmentDetails(appointmentId)
+        .then((response) => {
+          // Handle the response and display patient details in a modal or pop-up
+          this.showPatientDetailsModal(response.data);
+        })
+        .catch((error) => {
+          console.error('Error fetching appointment details:', error);
         });
-      },
+    },
     showPatientDetailsModal(patientDetails) {
         this.selectedPatientDetails = patientDetails;
         this.patientDetailsModal = true;

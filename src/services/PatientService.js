@@ -4,7 +4,7 @@ import axios from 'axios';
 var userId = 5;
 
 const http = axios.create({
-    baseURL: "https://medical-scheduler-spring-boot.herokuapp.com/"
+    baseURL: "https://medical-scheduling-application.herokuapp.com/"
 });
 
 export default {
@@ -17,11 +17,18 @@ export default {
     getPatientByUserId(id) {
         return http.get(`/patients/user/${id}`);
     },
-    update(id, patient) {
+    updatePatient(id, patient) {
         return http.put(`/patients/${id}`, patient);
     },
 
-    delete(id) {
+    getAllPatients() {
+        return http.get('/patients');
+    },
+
+    getPatientById(id) {
+      return http.get(`/patients/${id}`);
+    },
+    deletePatient(id) {
         return http.delete(`/patients/${id}`);
     },
 
