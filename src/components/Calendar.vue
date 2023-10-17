@@ -52,15 +52,31 @@
           :weekdays="weekday"
           :type="type"
           :events="filteredAppointments"
+          @click:event="showEventDetails"
           :now="now"
         ></v-calendar>
       </v-sheet>
+      <!-- Dialog for displaying appointment details -->
+      <v-dialog v-model="dialog" max-width="400px">
+        <v-card>
+          <v-card-title>Appointment Details</v-card-title>
+          <v-card-text>
+            <p><strong>Doctor:</strong> {{ selectedEvent.doctorName }}</p>
+            <p><strong>Patient:</strong> {{ selectedEvent.patientName }}</p>
+            <p><strong>Time:</strong> {{ selectedEvent.start }} - {{ selectedEvent.end }}</p>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </v-container>
 </template>
 <script>
 import Navbar from "../components/Navbar.vue";
 import AppointmentService from "../services/AppointmentService";
+import PatientService from "@/services/PatientService";
 
 export default {
   name: "calendar",
@@ -84,46 +100,85 @@ export default {
       names: ["Appointment", "Holiday", "PTO"],
       appointments: [],
       now: "2023-04-20",
-      selectedDoctorId: null, // id of doctor,
+      selectedDoctorId: null,
       doctors: [],
+      patients: [],
       doctorObj: {},
+      dialog: false,
+      selectedEvent: {}
     };
   },
   methods: {
     chosenDoctor() {
       this.selectedDoctorId = this.doctorObj.doctorId;
     },
-    getAppointments() {
+    async getAppointments() {
       AppointmentService.getAppointments().then((response) => {
-        this.$store.commit("SET_APPOINTMENTS", response.data);
+        this.$store.commit('SET_APPOINTMENTS',response.data);
         this.appointments = this.$store.state.appointments;
         this.getEvents();
       });
     },
+    showEventDetails(rawEvent) {
+      let event = rawEvent.event;
+      this.selectedEvent = event;
+      this.dialog = true;
+      // eslint-disable-next-line no-console
+      console.log("Clicked event details:", event);
+      // eslint-disable-next-line no-console
+      console.log('Selected doctor ID:', this.selectedDoctorId);
+      // eslint-disable-next-line no-console
+      console.log('Event doctor ID:', event.docId);
+      // eslint-disable-next-line no-console
+      console.log('Doctor name:', this.getDoctorName(event.docId));
+      // eslint-disable-next-line no-console
+      console.log('Patient name:', this.getPatientName(event.patientId));
+    },
     getEvents() {
-      for (let i = 0; i < this.appointments.length; i++) {
-        let temp = this.appointments[i];
-        let time = this.appointments[i].appointmentTime;
+      this.events = this.appointments.map(temp => {
+        let time = temp.appointmentTime;
         let endTime;
+        let hourPart = parseInt(time.slice(0, 2));
+
         if (time.slice(3, 5) === "30") {
-          endTime = time.slice(0, 2);
-          parseInt(endTime);
-          endTime++;
-          endTime = endTime.toString() + ":00:00";
+          hourPart++;
+          endTime = hourPart.toString().padStart(2, '0') + ":00:00";
         } else {
           endTime = time.slice(0, 2) + ":30:00";
         }
-        let event = {
-          docId: this.appointments[i].doctorId,
+
+
+        return {
+          docId: temp.doctorId,
           name: "Appointment",
+          doctorName: this.getDoctorName(temp.doctorId),
+          patientName: this.getPatientName(temp.patientId),
           start: temp.appointmentDate + "T" + temp.appointmentTime,
-          end: (temp.appointmentDate += "T" + endTime),
+          end: temp.appointmentDate + "T" + endTime,
           color: "blue",
           timed: false,
         };
-        this.events.push(event);
-      }
+      });
     },
+    getDoctorName(id) {
+      let doctor = this.doctors.find(doc => doc.doctorId === id);
+      // eslint-disable-next-line no-console
+      console.log("Doctor fetched for ID:", id, doctor);
+      return doctor ? doctor.firstName : 'Unknown';
+    },
+
+    getPatientName(id) {
+      let patient = this.patients.find(pat => pat.patientId === id);
+      // eslint-disable-next-line no-console
+      console.log("Patient fetched for ID:", id, patient);
+      return patient ? patient.firstName : 'Unknown';
+    },
+    async getPatients() {
+      PatientService.getAllPatients().then((response) => {
+        this.$store.commit("SET_PATIENTS", response.data);
+        this.patients = this.$store.state.patients;
+      });
+    }
   },
   computed: {
     // This should filter doctor apponintments by id - attached to :events for calendar
@@ -131,9 +186,10 @@ export default {
       return this.events.filter((appt) => appt.docId === this.selectedDoctorId);
     },
   },
-  created() {
-    this.getAppointments();
+  async created() {
+    await Promise.all([this.getAppointments(), this.getPatients()]);
     this.doctors = this.$store.state.doctors;
+    this.patients = this.$store.state.patients;
   },
 };
 </script>

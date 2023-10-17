@@ -38,6 +38,7 @@
 
 <script>
 import doctorService from "../services/DoctorService.js";
+import patientService from "@/services/PatientService";
 
 export default {
   name: "doctor-list",
@@ -57,6 +58,11 @@ export default {
     getDoctors() {
       doctorService.getAllDoctors().then((response) => {
         this.$store.commit("SET_DOCTORS", response.data);
+      });
+    },
+    getPatients() {
+      patientService.getAllPatients().then((response) => {
+        this.$store.commit("SET_PATIENTS", response.data);
       });
     },
     getItem() {
@@ -90,6 +96,7 @@ export default {
   },
   created() {
     this.getDoctors();
+    this.getPatients();
     // patientService
     //   .getPatientByUserId(this.$store.state.user.id)
     //   .then((response) => {
