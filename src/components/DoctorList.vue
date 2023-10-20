@@ -49,7 +49,7 @@ export default {
         { text: "Last Name", value: "lastName" },
         { text: "Specialty", value: "specialty" },
         { text: "Suite", value: "suiteNumber" },
-        { text: "Cost Per Hour", value: "costPerHour" },
+        { text: "Cost Per Hour(USD)", value: "costPerHour" },
         { text: "Phone Extension", value: "phoneNumber" },
       ];
     },
@@ -87,10 +87,10 @@ export default {
       doctors: [],
       userId: 0,
       officeInfo: {
-        officeName: "Programming Doctors United",
-        mainAddress: "555 Savelives st",
-        cityState: "Phoenix, AZ",
-        mainPhone: "800-500-1212",
+        officeName: "LifeMed Healthcare",
+        mainAddress: "1035 S Wabash St",
+        cityState: "Chicago, IL",
+        mainPhone: "800-534-1780",
       },
     };
   },
