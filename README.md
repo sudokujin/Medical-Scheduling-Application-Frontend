@@ -106,7 +106,7 @@ if (requiresAuth && store.state.token === '') {
 ```
 > Note: the application stores the current user (if any) and their authentication token in a centralized store using Vuex.
 ​
-### Vuex
+### Vue.js
 ​
 The state for this application is stored in `/store/index.js` using Vuex. The state object has two values: token and user. When you log in, the back-end service returns an authentication token along with your user credentials.
 ​
